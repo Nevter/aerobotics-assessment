@@ -18,7 +18,7 @@ HOST_NAME = os.getenv('HOSTNAME')
 @app.get("/")
 def read_root():
     
-    with open('./algorithm.md', 'r') as file:
+    with open('./README.md', 'r') as file:
       algoMd = file.read()
 
     # Convert the input to HTML
@@ -72,7 +72,6 @@ def orchard_missing_trees(orchard_id: int):
     print(f"Response: {response}")
 
     return response
-
 
 def call_aerobotics_api(path: str, params: dict): 
     return requests.get(

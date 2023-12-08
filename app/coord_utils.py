@@ -42,7 +42,10 @@ def is_point_on_line(A, B, X, precision=1e-10):
   - precision: Optional parameter to specify the precision for the check.
 
   Returns:
-  - True if X lies on the line segment AB within the specified precision, False otherwise.
+  - Tuple of the following values: 
+     - True if X lies on the line segment AB within the specified precision, False otherwise.
+     - If X lies on the line segment, the slope of the line.
+     - If X lies on the line segment, the average distance between the trees on that line segment.
   """
   # Calculate slopes
   slope_AB = (B[1] - A[1]) / (B[0] - A[0]) if (B[0] - A[0]) != 0 else float('inf')
@@ -61,14 +64,25 @@ def is_point_on_line(A, B, X, precision=1e-10):
   return (False, 0, 0)
 
 def get_boundary_coords(coords):
+  """
+  Calculate the boundary coordinates of a set of coords.
+
+  Parameters:
+  - coords: A list of tuples representing GPS coordinates (latitude, longitude).
+
+  Returns:
+  - Tuple representing the the min and max latitude, and the min and max longitude.
+  """
+      
   lat = [-x[0] for x in coords]
   lng = [x[1] for x in coords]
   return min(lat), max(lat), min(lng), max(lng)
 
 def haversine_distance(coord1, coord2):
   """
-  Calculate the great-circle distance between two GPS coordinates using the Haversine formula.
-
+  Calculate the distance on a sphere between two GPS coordinates using the Haversine formula.
+  https://en.wikipedia.org/wiki/Haversine_formula
+  
   Parameters:
   - coord1: Tuple (latitude, longitude) for the first coordinate.
   - coord2: Tuple (latitude, longitude) for the second coordinate.
@@ -92,6 +106,16 @@ def haversine_distance(coord1, coord2):
 
 
 def find_center_coord(coords):
+  """
+  Calculate the center point of a set of coordinates.
+  
+  Parameters:
+  - coords: A list of tuples representing the coordiantes of a point (latitude, longitude).
+
+  Returns:
+  - coordinate: A tuple representing the center coordinate (latitude, longitude).
+  """
+
   avg_x = sum(x for x, _ in coords) / len(coords)
   avg_y = sum(y for _, y in coords) / len(coords)
   return (avg_x, avg_y)

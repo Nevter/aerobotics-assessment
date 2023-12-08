@@ -43,7 +43,7 @@ USER appuser
 COPY . .
 
 COPY assets /assets
-COPY /algorithm.md /
+COPY /README.md /
 
 # Expose the port that the application listens on.
 EXPOSE 8000
