@@ -4,6 +4,8 @@ Author: Luke Neville
 
 Date: 08/12/2023
 
+_This content can be found at 146.190.160.117:8000/_
+
 ## Task
 
 Set up a server that hosts an API. The API has a single path: https://<hostname>/orchards/{orchard_id}/missing-trees
@@ -18,7 +20,7 @@ with Docker, and is deployed on a Digital Ocean droplet. Version control uses Gi
 
 ## API usage
 The API can be queried at: 
-> http://146.190.160.117:8000/orchards/216269/missing-trees
+> 146.190.160.117:8000/orchards/216269/missing-trees
 
 which gives the following response: 
 
