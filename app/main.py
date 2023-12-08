@@ -4,16 +4,16 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import requests
-
+import os
 from app.orchard_utils import *
 
 app = FastAPI()
 
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
-
 base_url = "https://sherlock.aerobotics.com/developers"
-api_token = "1566394169B0EJX2MGAVKVUGGKEMKZBMND9A7VCR"
+API_KEY = os.getenv('API_KEY')
+HOST_NAME = os.getenv('HOSTNAME')
 
 @app.get("/")
 def read_root():
@@ -34,6 +34,10 @@ def read_root():
         </body>
     </html>
     """
+
+    img_str = f"![img](http://{HOST_NAME}:8000/"
+    html_content = html_content.replace("![img](", img_str)
+
     return HTMLResponse(content=html_content, status_code=200)
 
 @app.get("/orchards/{orchard_id}/missing-trees")
@@ -74,5 +78,5 @@ def call_aerobotics_api(path: str, params: dict):
     return requests.get(
         f"{base_url}/{path}",
         params=params,
-        headers={"Authorization": api_token, 
+        headers={"Authorization": API_KEY, 
                  "accept": "application/json"})
