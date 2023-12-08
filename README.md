@@ -80,7 +80,7 @@ Finally, the midpoint of these missing tree groups is found, identifying the loc
 3) The precision that is used to determine the area that constitutes a group of trees
   [Used value: 2.5m]
 
-#### Extension
+### Extension
 
 In interior corners of the orchard, such the the one shown below (where an 'X' is a tree) is is unknowable 
 whether there should be a tree at position 0 - we simply do not know what the farmer intended. 
@@ -106,7 +106,7 @@ In this case, the API could respond with these additional potentially missing tr
 }
 ```
 
-### Assumptions with this algorithm
+### Assumptions
 1) There cant be three missing trees in a row
   Since the algorithm requires three adacent trees to be neighbours of the missing tree, an internal 
   row of three missing trees will find the two outer ones, but not the inner tree. 
@@ -143,7 +143,7 @@ Combined, these give the following after two runs, as expected
 
 2) The orchard is planted in a grid pattern with the two major axes at roughly 90 degree angles to each other. 
 3) The trees are spaced roughly equally along each axis (note that each axis does not have to have the same 
-spacing)
+spacing, but the spacing must be consistent on each axis).
 
 ## Run:
 * Create a .env file containing the Aerobotics API key and the hostname of the server
