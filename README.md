@@ -39,12 +39,12 @@ The 'orchard features' are then extracted. These features are the angle of each 
 well as the average distance between each tree on each axis. 
 
 To compute this, each tree is looked at in turn (below represented in a green dot). The four closest 
-neighbour trees are then found (show in red dots). For each pair of neighbour trees, a line is drawn 
+neighbour trees are then found (shown in red dots). For each pair of neighbour trees, a line is drawn 
 between them, and it is checked if the origional center tree is situated on that line. If it is, we
 have found one of the major axes of the orchard. The angle/ slope of this line is stored, along with the 
 average distance between the three trees on this line. This is done for every tree in the orchard. 
 These are then seperated into two groups based on the gradient, giving one group for each major axis 
-in the orchard. These are then averaged to find the average slope and tree spacing/ distance on each axis. a
+in the orchard. These are then averaged to find the average slope and tree spacing/ distance on each axis.
 
 ![img](assets/features.png)
 
@@ -62,7 +62,7 @@ This gives the following set of points.
 ![img](assets/all_missing.png)
 
 We can only know for sure that a tree is missing if 3 or more neighbour trees expected there to be a 
-tree in that locaation. We thus iterate over all these missing trees and only keep the points that are in a 
+tree in that location. We thus iterate over all these missing trees and only keep the points that are in a 
 group of three or more. 
 
 ![img](assets/missing_groups.png)
@@ -73,27 +73,25 @@ Finally, the midpoint of these missing tree groups is found, identifying the loc
 
 ### Algorithm parameters
 
-1) The precision that is used to check whether or not a tree falls on a line. 
-  [Used value: 0.5m on either side of the line]
-2) The precision that is used to check whether or not a tree exists in the radius of a location. 
-  [Used value: 2.5m]
-3) The precision that is used to determine the area that constitutes a group of trees
-  [Used value: 2.5m]
+1) The precision that is used to check whether or not a tree falls on a line. [Used value: 0.5m on either side of the line]
+
+2) The precision that is used to check whether or not a tree exists in the radius of a location. [Used value: 2.5m]
+
+3) The precision that is used to determine the area that constitutes a group of trees. [Used value: 2.5m]
 
 ### Extension
 
-In interior corners of the orchard, such the the one shown below (where an 'X' is a tree) is is unknowable 
+In interior corners of the orchard, such as the the one shown below (where an 'X' is a tree) is is unknowable 
 whether there should be a tree at position 0 - we simply do not know what the farmer intended. 
 
-```
+
     X X X X
       0 X X   
         X X
-```
 
 By taking the groups of two potentially missing trees, we can also determine the _potentially_ missing 
 trees. Here, the trees we can be sure are missing are shown in red, with the trees that we are unsure
-if the farmer intends to be there or now, shown in orange.
+if the farmer intends to be there or not, shown in orange.
 
 ![img](assets/potentially_missing_trees.png)
 
@@ -107,41 +105,39 @@ In this case, the API could respond with these additional potentially missing tr
 ```
 
 ### Assumptions
-1) There cant be three missing trees in a row
+1) There cant be three missing trees in a row.
   Since the algorithm requires three adacent trees to be neighbours of the missing tree, an internal 
   row of three missing trees will find the two outer ones, but not the inner tree. 
 
-```
-    X X X       X X X
-    X   X       X 0 X
-    X   X   --> X   X
-    X   X       X 0 X
-    X X X       X X X
-```
 
- Here, the 0's will be identified. To get around this, the algorithm can be run on a loop until no new
- missing trees are found, where the missing trees from the previous run are incorporated into the next run. 
- This will then identify all missing trees. 
+        X X X       X X X
+        X   X       X 0 X
+        X   X   --> X   X
+        X   X       X 0 X
+        X X X       X X X
 
- ```
-    X X X       X X X
-    X X X       X X X
-    X   X   --> X 0 X  
-    X X X       X X X
-    X X X       X X X
-```
+
+  Here, the 0's will be identified. To get around this, the algorithm can be run on a loop until no new
+  missing trees are found, where the missing trees from the previous run are incorporated into the next run. 
+  This will then identify all missing trees. 
+
+
+        X X X       X X X
+        X X X       X X X
+        X   X   --> X 0 X  
+        X X X       X X X
+        X X X       X X X
 
 Combined, these give the following after two runs, as expected
 
-```
-    X X X
-    X 0 X
-    X 0 X  
-    X 0 X
-    X X X
-```
+        X X X
+        X 0 X
+        X 0 X  
+        X 0 X
+        X X X
 
 2) The orchard is planted in a grid pattern with the two major axes at roughly 90 degree angles to each other. 
+
 3) The trees are spaced roughly equally along each axis (note that each axis does not have to have the same 
 spacing, but the spacing must be consistent on each axis).
 

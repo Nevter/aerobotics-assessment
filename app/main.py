@@ -1,4 +1,3 @@
-from typing import Union
 import markdown
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -8,7 +7,6 @@ import os
 from app.orchard_utils import *
 
 app = FastAPI()
-
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 base_url = "https://sherlock.aerobotics.com/developers"
@@ -19,10 +17,10 @@ HOST_NAME = os.getenv('HOSTNAME')
 def read_root():
     
     with open('./README.md', 'r') as file:
-      algoMd = file.read()
+      readme_md = file.read()
 
     # Convert the input to HTML
-    algoHTML = markdown.markdown(algoMd)
+    readme = markdown.markdown(readme_md)
 
     html_content = f"""
     <html>
@@ -30,7 +28,7 @@ def read_root():
             <title>Aerobotics Assignment</title>
         </head>
         <body>
-            {algoHTML}
+            {readme}
         </body>
     </html>
     """
@@ -43,6 +41,7 @@ def read_root():
 @app.get("/orchards/{orchard_id}/missing-trees")
 def orchard_missing_trees(orchard_id: int):
 
+    # Print to stdout instead of logging for now
     print(f"Requst to find missing trees in orchard {orchard_id}")
 
     survey_content = call_aerobotics_api(path="treesurveys/", params={"survey__orchard_id": orchard_id})
@@ -52,7 +51,7 @@ def orchard_missing_trees(orchard_id: int):
     results = survey_content.json()['results']
     all_trees = [(float(s['latitude']), float(s['longitude'])) for s in results]
 
-    # Get slope and distance between trees on both axis in the orchard
+    # Get slope and distance between trees on both axes in the orchard
     features = get_orchard_features(all_trees)
 
     # Find missing trees
